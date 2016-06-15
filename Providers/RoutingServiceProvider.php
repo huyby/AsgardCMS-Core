@@ -50,11 +50,19 @@ abstract class RoutingServiceProvider extends ServiceProvider
         $router->group(['namespace' => $this->namespace], function (Router $router) {
             $this->loadApiRoutes($router);
         });
+        $middleware = array_merge(config('asgard.core.core.middleware.global', []), ['localizationRedirect']);
 
-        $router->group(['namespace' => $this->namespace, 'prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localizationRedirect'] ], function (Router $router) {
-            $this->loadBackendRoutes($router);
-            $this->loadFrontendRoutes($router);
-        });
+        $router->group(
+            [
+                'namespace' => $this->namespace,
+                'prefix' => LaravelLocalization::setLocale(),
+                'middleware' => $middleware
+            ],
+            function (Router $router) {
+                $this->loadBackendRoutes($router);
+                $this->loadFrontendRoutes($router);
+            }
+        );
     }
 
     /**

@@ -41,6 +41,7 @@ return [
     | Backend and Frontend routes.
     */
     'middleware' => [
+       'global' => [],
        'backend' => [
            'auth.admin',
            'permissions',
